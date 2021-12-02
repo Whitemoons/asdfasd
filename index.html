@@ -7,16 +7,20 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="text"></div>
+    <div id="text"></div>
+    <button onclick="print();"></button>
 </body>
 <script>
-    var XHR = new XMLHttpRequest();
-    XHR.addEventListener('load', function(e){
-    const result = e.target.response
-    console.log(typeof result) // string
-    console.log(result) // json과 유사하게 생긴 string
-    const jsObject = JSON.parse(result)
-	console.log(jsObject)
-})
+    function print() {
+        fetch("str.json")
+            .then(response => response.json())
+            .then(json => {
+                data = json
+                textList = document.getElementById('text')
+                for (let i in data) {
+                    textList.innerHTML = `${i.str}<br>`
+                }
+            })
+    }
 </script>
 </html>
