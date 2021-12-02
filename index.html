@@ -11,14 +11,37 @@
     <button onclick="print();"></button>
 </body>
 <script>
+    function getParameterByName(name) { 
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)")
+        var results = regex.exec(location.search);
+        return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+    var patId = getParameterByName("str")
+
+    function save(patId) {
+        if ( patId ) {
+            fetch("str.json")
+            .then(response => response.json())
+            .then(json => {
+                var tmpJson = new Object();
+                tmpJson.str = patId;
+                console.log(json,patId,tmpJson);
+                json.data.push(tmpJson);
+                console.log('succes');
+            })
+        }
+    }
+    save(patId);
+
     function print() {
         fetch("str.json")
             .then(response => response.json())
             .then(json => {
-                data = json
+                data = json;
                 textList = document.getElementById('text')
-                for (let i in data) {
-                    textList.innerHTML = `${i.str}<br>`
+                for (let i of data.data) {
+                    textList.innerHTML += `${i.str}<br>`
                 }
             })
     }
